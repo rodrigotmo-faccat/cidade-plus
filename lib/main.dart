@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'view/login_view.dart';
 import 'view/cadastro_view.dart';
 import 'view/home_view.dart';
+import 'view/perfil_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginView(),
         '/cadastro': (context) => const CadastroView(),
         '/home': (context) => const HomeView(),
+        '/perfil': (context) => const PerfilView(),
       },
     );
   }

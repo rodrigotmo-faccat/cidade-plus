@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../presenter/home_presenter.dart';
 
 abstract class HomeViewContract {
@@ -56,10 +57,7 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
               title: const Text('Sair do aplicativo'),
               selected: _selectedIndex == 1,
               onTap: () {
-                // Update the state of the app
-                _onItemTapped(1);
-                // Then close the drawer
-                Navigator.pop(context);
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
               },
             ),
           ],

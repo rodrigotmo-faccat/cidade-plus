@@ -49,24 +49,15 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
                 _onItemTapped(0);
                 // Then close the drawer
                 Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Alterar senha'),
-              selected: _selectedIndex == 1,
-              onTap: () {
-                // Update the state of the app
-                _onItemTapped(1);
-                // Then close the drawer
-                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/perfil');
               },
             ),
             ListTile(
               title: const Text('Sair do aplicativo'),
-              selected: _selectedIndex == 2,
+              selected: _selectedIndex == 1,
               onTap: () {
                 // Update the state of the app
-                _onItemTapped(2);
+                _onItemTapped(1);
                 // Then close the drawer
                 Navigator.pop(context);
               },

@@ -35,6 +35,14 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
             child: Column(children: [
           Text('Bem-vindo ao Cidade+'),
         ])),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Pressionado')),
+            );
+          },
+        ),
         drawer: Drawer(
             child: ListView(
           padding: EdgeInsets.zero,

@@ -3,30 +3,25 @@ import '../presenter/demanda_presenter.dart';
 
 const List<String> list = <String>['Iluminaçao', 'Buraco', 'Poda', 'Lixo'];
 
-abstract class DemandaViewContract {
-  void aoCadastrarDemanda();
-}
-
 class DemandaView extends StatefulWidget {
-  const DemandaView({super.key});
+  final DemandaPresenter presenter;
+
+  DemandaView({required this.presenter});
 
   @override
   _DemandaViewState createState() => _DemandaViewState();
 }
 
-class _DemandaViewState extends State<DemandaView>
-    implements DemandaViewContract {
+class _DemandaViewState extends State<DemandaView> {
   final TextEditingController _descricaoController = TextEditingController();
   final TextEditingController _enderecoController = TextEditingController();
   final TextEditingController _pontoDeReferenciaController =
       TextEditingController();
-  late DemandaPresenter _presenter;
   String dropdownValue = list.first;
 
   @override
   void initState() {
     super.initState();
-    _presenter = DemandaPresenter(this);
   }
 
   @override
@@ -72,13 +67,18 @@ class _DemandaViewState extends State<DemandaView>
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 String descricao = _descricaoController.text;
                 String endereco = _enderecoController.text;
                 String pontoDeReferencia = _pontoDeReferenciaController.text;
                 String data = DateTime.now().toIso8601String();
-                _presenter.cadastrarDemanda(descricao, endereco,
+
+                await widget.presenter.cadastrarDemanda(descricao, endereco,
                     pontoDeReferencia, dropdownValue, data);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Demanda cadastrada com sucesso!')),
+                );
+                Navigator.pushReplacementNamed(context, '/home');
               },
               child: const Text('Salvar'),
             ),
@@ -86,13 +86,5 @@ class _DemandaViewState extends State<DemandaView>
         ),
       ),
     );
-  }
-
-  @override
-  void aoCadastrarDemanda() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Demanda cadastrada com sucesso!')),
-    );
-    Navigator.pushReplacementNamed(context, '/home');
   }
 }

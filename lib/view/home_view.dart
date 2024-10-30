@@ -38,9 +38,7 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Pressionado')),
-            );
+            Navigator.pushReplacementNamed(context, '/cadastrarDemanda');
           },
         ),
         drawer: Drawer(

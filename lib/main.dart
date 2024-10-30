@@ -3,6 +3,7 @@ import 'view/login_view.dart';
 import 'view/cadastro_view.dart';
 import 'view/home_view.dart';
 import 'view/perfil_view.dart';
+import 'view/demanda_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
       initialRoute: '/login',
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         '/cadastro': (context) => const CadastroView(),
         '/home': (context) => const HomeView(),
         '/perfil': (context) => const PerfilView(),
+        '/cadastrarDemanda': (context) => const DemandaView(),
       },
     );
   }

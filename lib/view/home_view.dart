@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../presenter/home_presenter.dart';
+import '../presenter/demanda_presenter.dart';
+import 'package:trab_dispositivos_moveis/model/demanda_model.dart';
 
 abstract class HomeViewContract {
   void sair();
 }
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final DemandaPresenter presenter;
+
+  HomeView({required this.presenter});
 
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -15,10 +18,12 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> implements HomeViewContract {
   int _selectedIndex = 0;
+  late Future<List<Demanda>> _demandas;
 
   @override
   void initState() {
     super.initState();
+    _demandas = widget.presenter.buscarDemandas();
   }
 
   void _onItemTapped(int index) {
@@ -31,10 +36,30 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: const Text('Home')),
-        body: const Center(
-            child: Column(children: [
-          Text('Bem-vindo ao Cidade+'),
-        ])),
+        body: FutureBuilder<List<Demanda>>(
+          future: _demandas,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Erro ao carregar demandas'));
+            }
+
+            final demandas = snapshot.data!;
+
+            return ListView.builder(
+              itemCount: demandas.length,
+              itemBuilder: (context, index) {
+                final demanda = demandas[index];
+
+                return ListTile(
+                  title: Text(demanda.descricao),
+                  subtitle: Text(demanda.endereco),
+                );
+              },
+            );
+          },
+        ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {

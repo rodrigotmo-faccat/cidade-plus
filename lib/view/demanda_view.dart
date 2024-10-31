@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../presenter/demanda_presenter.dart';
 
-const List<String> list = <String>['Iluminaçao', 'Buraco', 'Poda', 'Lixo'];
+const List<String> list = <String>['Iluminação', 'Buraco', 'Poda', 'Lixo'];
 
 class DemandaView extends StatefulWidget {
   final DemandaPresenter presenter;

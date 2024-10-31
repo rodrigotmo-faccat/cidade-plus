@@ -54,9 +54,13 @@ class DemandaDao {
   }
 
   Future<void> inserirDemanda(Demanda demanda) async {
-    // Obtém a instância do banco de dados
     final db = await instance.database;
-
     await db.insert('demandas', demanda.toJson());
+  }
+
+  Future<List<Demanda>> listarDemandas() async {
+    final db = await instance.database;
+    final result = await db.query('demandas');
+    return result.map((json) => Demanda.fromJson(json)).toList();
   }
 }

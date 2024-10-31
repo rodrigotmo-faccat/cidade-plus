@@ -16,4 +16,9 @@ class DemandaPresenter {
         data: data);
     await db.inserirDemanda(demanda);
   }
+
+  Future<List<Demanda>> buscarDemandas() async {
+    final demandas = await db.listarDemandas();
+    return demandas.toList();
+  }
 }

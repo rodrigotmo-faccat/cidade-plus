@@ -1,12 +1,12 @@
 // Importação do modelo de tarefa, que define como as tarefas serão representadas
-import 'package:trab_dispositivos_moveis/model/demanda_model.dart';
+//import 'package:trab_dispositivos_moveis/model/demanda_model.dart';
 // Importação do pacote sqflite para manipulação de banco de dados SQLite
-import 'package:sqflite/sqflite.dart';
+//import 'package:sqflite/sqflite.dart';
 // Importação do pacote path para trabalhar com caminhos de arquivos
-import 'package:path/path.dart';
+//import 'package:path/path.dart';
 
 // Definição da classe DemandaDao, que é responsável por acessar e manipular o banco de dados das tarefas
-class DemandaDao {
+/* class DemandaDao {
   // Singleton da classe DemandaDao, garantindo que apenas uma instância exista
   static final DemandaDao instance = DemandaDao._init();
 
@@ -63,4 +63,4 @@ class DemandaDao {
     final result = await db.query('demandas');
     return result.map((json) => Demanda.fromJson(json)).toList();
   }
-}
+} */

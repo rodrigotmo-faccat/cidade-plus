@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:trab_dispositivos_moveis/presenter/cadastro_presenter.dart';
+import 'package:trab_dispositivos_moveis/view/cadastro_form_page.dart';
+import 'package:trab_dispositivos_moveis/view/cadastro_view.dart';
 import '../presenter/login_presenter.dart';
 
-// Contrato que define o que a view do login deve implementar
 abstract class LoginViewContract {
   void onLoginSuccess();
   void onLoginError(String error);
-  void criarConta();
 }
 
 class LoginView extends StatefulWidget {
@@ -15,15 +16,20 @@ class LoginView extends StatefulWidget {
   _LoginViewState createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> implements LoginViewContract {
+class _LoginViewState extends State<LoginView>
+    implements LoginViewContract, CadastroView {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   late LoginPresenter _presenter;
+  late CadastroPresenter cadastroPresenter;
+
+  String errorMessage = '';
 
   @override
   void initState() {
     super.initState();
     _presenter = LoginPresenter(this);
+    cadastroPresenter = CadastroPresenter(this);
   }
 
   @override
@@ -56,7 +62,13 @@ class _LoginViewState extends State<LoginView> implements LoginViewContract {
             ),
             ElevatedButton(
               onPressed: () {
-                _presenter.criarConta();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        CadastroFormPage(presenter: cadastroPresenter),
+                  ),
+                );
               },
               child: const Text('Criar conta'),
             ),
@@ -66,7 +78,7 @@ class _LoginViewState extends State<LoginView> implements LoginViewContract {
     );
   }
 
-  // Quando o login for bem-sucedido, navega para a tela de cadastro de cidades
+  // Quando o login for bem-sucedido, navega para a home
   @override
   void onLoginSuccess() {
     Navigator.pushReplacementNamed(context, '/home');
@@ -78,9 +90,10 @@ class _LoginViewState extends State<LoginView> implements LoginViewContract {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
   }
 
-  // Exibe mensagem de erro em caso de falha no login
   @override
-  void criarConta() {
-    Navigator.pushReplacementNamed(context, '/cadastro');
+  void showError(String error) {
+    setState(() {
+      errorMessage = error;
+    });
   }
 }

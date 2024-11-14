@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1024611041805",
+    "project_id": "cidade-plus",
+    "storage_bucket": "cidade-plus.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024611041805:android:1c9f8c4cf0ce4480fb4b44",
+        "android_client_info": {
+          "package_name": "com.example.trab_dispositivos_moveis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDq5TW9xFSk9x6t8OH6YoIXQyOfys8tFP4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,7 @@
 import '../view/home_view.dart';
 
 class HomePresenter {
-  final HomeViewContract view;
+  final HomeView view;
 
   HomePresenter(this.view);
 

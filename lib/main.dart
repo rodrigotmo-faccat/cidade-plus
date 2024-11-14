@@ -1,23 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:trab_dispositivos_moveis/firebase_options.dart';
+import 'package:trab_dispositivos_moveis/view/home_page.dart';
 import 'view/login_view.dart';
-import 'view/cadastro_view.dart';
-import 'view/home_view.dart';
 import 'view/perfil_view.dart';
-import 'view/demanda_view.dart';
-import '../dao/demanda_dao.dart';
-import '../presenter/demanda_presenter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final demandaDao = DemandaDao.instance;
-  final demandaPresenter = DemandaPresenter(demandaDao);
-  runApp(MyApp(demandaPresenter: demandaPresenter));
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final DemandaPresenter demandaPresenter;
-
-  MyApp({required this.demandaPresenter});
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -31,12 +28,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginView(),
-        '/cadastro': (context) => const CadastroView(),
-        '/home': (context) => HomeView(presenter: demandaPresenter),
+        '/home': (context) => HomePage(),
         '/perfil': (context) => const PerfilView(),
-        '/cadastrarDemanda': (context) => DemandaView(
-              presenter: demandaPresenter,
-            ),
       },
     );
   }

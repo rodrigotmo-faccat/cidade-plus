@@ -13,8 +13,4 @@ class LoginPresenter {
       view.onLoginError("Usuário/senha inválidos.");
     }
   }
-
-  void criarConta() {
-    view.criarConta();
-  }
 }

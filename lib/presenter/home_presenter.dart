@@ -4,8 +4,4 @@ class HomePresenter {
   final HomeView view;
 
   HomePresenter(this.view);
-
-  void sair() {
-    view.sair();
-  }
 }

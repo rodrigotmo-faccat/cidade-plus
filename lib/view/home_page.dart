@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trab_dispositivos_moveis/model/demanda_model.dart';
@@ -15,6 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> implements HomeView, DemandaView {
   int _selectedIndex = 0;
   late DemandaPresenter presenter;
+  final user = FirebaseAuth.instance.currentUser!;
 
   List<Demanda> demandas = [];
   String errorMessage = '';
@@ -53,9 +55,9 @@ class _HomePageState extends State<HomePage> implements HomeView, DemandaView {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.green,
-          title: const Text(
-            'Olá, Rodrigo',
-            style: TextStyle(
+          title: Text(
+            'Olá, ${user.displayName}',
+            style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 22,
@@ -148,30 +150,26 @@ class _HomePageState extends State<HomePage> implements HomeView, DemandaView {
             const DrawerHeader(
               child: Text('Menus'),
             ),
-            ListTile(
+            /* ListTile(
               title: const Text('Perfil'),
               selected: _selectedIndex == 0,
               onTap: () {
                 // Update the state of the app
                 _onItemTapped(0);
                 // Then close the drawer
-                Navigator.pop(context);
+                //Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/perfil');
               },
-            ),
+            ), */
             ListTile(
               title: const Text('Sair do aplicativo'),
               selected: _selectedIndex == 1,
               onTap: () {
+                FirebaseAuth.instance.signOut();
                 SystemChannels.platform.invokeMethod('SystemNavigator.pop');
               },
             ),
           ],
         )));
-  }
-
-  @override
-  void sair() {
-    Navigator.pushReplacementNamed(context, '/login');
   }
 }

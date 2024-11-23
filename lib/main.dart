@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:trab_dispositivos_moveis/firebase_options.dart';
+import 'package:trab_dispositivos_moveis/presenter/login_presenter.dart';
 import 'package:trab_dispositivos_moveis/view/home_page.dart';
 import 'view/login_view.dart';
 import 'view/perfil_view.dart';
@@ -16,7 +17,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,7 +27,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/login',
       routes: {
-        '/login': (context) => const LoginView(),
+        '/login': (context) => LoginView(
+              presenter: LoginPresenter(),
+            ),
         '/home': (context) => HomePage(),
         '/perfil': (context) => const PerfilView(),
       },

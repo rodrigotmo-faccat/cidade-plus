@@ -1,99 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:trab_dispositivos_moveis/presenter/cadastro_presenter.dart';
-import 'package:trab_dispositivos_moveis/view/cadastro_form_page.dart';
-import 'package:trab_dispositivos_moveis/view/cadastro_view.dart';
+import 'package:trab_dispositivos_moveis/view/home_page.dart';
 import '../presenter/login_presenter.dart';
 
-abstract class LoginViewContract {
-  void onLoginSuccess();
-  void onLoginError(String error);
-}
+class LoginView extends StatelessWidget {
+  final LoginPresenter presenter;
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
-
-  @override
-  _LoginViewState createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView>
-    implements LoginViewContract, CadastroView {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  late LoginPresenter _presenter;
-  late CadastroPresenter cadastroPresenter;
-
-  String errorMessage = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _presenter = LoginPresenter(this);
-    cadastroPresenter = CadastroPresenter(this);
-  }
+  LoginView({Key? key, required this.presenter}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      appBar: AppBar(),
+      body: Center(
         child: Column(
           children: [
-            TextField(
-              controller: _usernameController,
-              decoration: const InputDecoration(labelText: 'Usuário'),
+            Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+              height: 200.0,
+              width: 200.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                image: const DecorationImage(
+                  image: AssetImage("assets/logo.png"),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Senha'),
-              obscureText: true,
+            const SizedBox(
+              height: 50,
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                String username = _usernameController.text;
-                String password = _passwordController.text;
-                _presenter.login(username, password);
+            ElevatedButton.icon(
+              onPressed: () async {
+                bool success = await presenter.signInWithGoogle();
+                if (success) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Login falhou!")),
+                  );
+                }
               },
-              child: const Text('Login'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        CadastroFormPage(presenter: cadastroPresenter),
-                  ),
-                );
-              },
-              child: const Text('Criar conta'),
+              icon: Image.asset(
+                'assets/google_icon.png',
+                height: 24,
+                width: 24,
+              ),
+              label: Text("Entrar com conta Google"),
             ),
           ],
         ),
       ),
     );
-  }
-
-  // Quando o login for bem-sucedido, navega para a home
-  @override
-  void onLoginSuccess() {
-    Navigator.pushReplacementNamed(context, '/home');
-  }
-
-  // Exibe mensagem de erro em caso de falha no login
-  @override
-  void onLoginError(String error) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
-  }
-
-  @override
-  void showError(String error) {
-    setState(() {
-      errorMessage = error;
-    });
   }
 }

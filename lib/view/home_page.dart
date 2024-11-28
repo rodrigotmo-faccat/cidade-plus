@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:trab_dispositivos_moveis/model/demanda_model.dart';
 import 'package:trab_dispositivos_moveis/presenter/demanda_presenter.dart';
 import 'package:trab_dispositivos_moveis/presenter/home_presenter.dart';
+import 'package:trab_dispositivos_moveis/presenter/save_and_open_pdf.dart';
+import 'package:trab_dispositivos_moveis/presenter/simple_pdf_api.dart';
 import 'package:trab_dispositivos_moveis/view/demanda_form_page.dart';
 import 'package:trab_dispositivos_moveis/view/demanda_view.dart';
 import 'package:trab_dispositivos_moveis/view/home_view.dart';
@@ -16,6 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> implements HomeView, DemandaView {
   int _selectedIndex = 0;
   late DemandaPresenter presenter;
+  late HomePresenter homePresenter;
   final user = FirebaseAuth.instance.currentUser!;
 
   List<Demanda> demandas = [];
@@ -33,6 +36,7 @@ class _HomePageState extends State<HomePage> implements HomeView, DemandaView {
 
     presenter = DemandaPresenter(this);
     presenter.fetchDemandasFirebase();
+    homePresenter = HomePresenter(this);
   }
 
   @override
@@ -54,17 +58,18 @@ class _HomePageState extends State<HomePage> implements HomeView, DemandaView {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.green[900],
           title: Text(
             'Olá, ${user.displayName}',
             style: const TextStyle(
-              color: Colors.black,
+              color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 22,
             ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.orange,
           child: const Icon(Icons.add),
           onPressed: () async {
             bool? demandaAdicionada = await Navigator.push(
@@ -79,25 +84,51 @@ class _HomePageState extends State<HomePage> implements HomeView, DemandaView {
             }
           },
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.green[100],
+        bottomNavigationBar: BottomAppBar(
+            color: Colors.green[900],
+            child: IconTheme(
+              data:
+                  IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        final simplePdfFile =
+                            await SimplePdfApi.generateSimpleTextPdf(demandas);
+                        SaveAndOpenDocument.openPdf(simplePdfFile);
+                      },
+                      icon: const Icon(
+                        Icons.file_download,
+                        color: Colors.black,
+                      ),
+                      label: const Text(
+                        'Gerar PDF com demandas',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ]),
+            )),
         body: errorMessage.isEmpty
             ? ListView.builder(
+                padding: EdgeInsets.only(top: 20),
                 itemCount: demandas.length,
                 itemBuilder: (context, index) {
                   return Card(
+                      color: Colors.white,
                       margin: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 20),
-                      elevation: 3, // Elevação para dar profundidade aos cards
+                      elevation: 3,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            15), // Bordas arredondadas no estilo moderno
+                        borderRadius: BorderRadius.circular(15),
                       ),
                       child: Column(
                         children: [
                           ListTile(
                             contentPadding: const EdgeInsets.all(16),
                             leading: CircleAvatar(
-                              backgroundColor: Colors.blueAccent,
+                              backgroundColor: Colors.orange,
                               child: Text(
                                 demandas[index].categoria[0],
                                 style: const TextStyle(color: Colors.white),
@@ -118,9 +149,6 @@ class _HomePageState extends State<HomePage> implements HomeView, DemandaView {
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.settings)),
                                 IconButton(
                                     onPressed: () async {
                                       await presenter.deleteDemandaFirebase(
